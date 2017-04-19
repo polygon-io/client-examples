@@ -2,3 +2,4 @@
 Below are some examples of how to connect and use Polygon.io. Feel free to submit pull requests with your example code.
 
 - [NodeJs](./nodejs)
+- [GoLang](./golang/main.go)
