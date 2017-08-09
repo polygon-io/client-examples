@@ -3,6 +3,7 @@ Below are some examples of how to connect and use Polygon.io. Feel free to submi
 
 - [NodeJs](./nodejs)
 - [GoLang](./golang/main.go)
+- [Python3](./python/polygon.py)
 
 ---
 
