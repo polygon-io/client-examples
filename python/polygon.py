@@ -1,9 +1,14 @@
+#!/usr/bin/python3.6
+
 import asyncio
 import os
 import signal
+import sys
 from nats.aio.client import Client as NATS
 
 # Be sure to: pip install asyncio-nats-client
+
+print("API KEY: {0}".format(sys.argv[1]))
 
 def run(loop):
     nc = NATS()
@@ -16,13 +21,14 @@ def run(loop):
 
     options = {
         "servers": [
-            'nats://YOUR_API_TOKEN@nats1.polygon.io:30401',
-            'nats://YOUR_API_TOKEN@nats2.polygon.io:30402',
-            'nats://YOUR_API_TOKEN@nats3.polygon.io:30403'
+            "nats://{0}@nats1.polygon.io:30401".format(sys.argv[1]),
+            "nats://{0}@nats2.polygon.io:30402".format(sys.argv[1]),
+            "nats://{0}@nats3.polygon.io:30403".format(sys.argv[1])
         ],
         "io_loop": loop,
         "closed_cb": closed_cb
     }
+    print( str(options) )
 
     yield from nc.connect(**options)
     print("Connected to NATS at {}...".format(nc.connected_url.netloc))
