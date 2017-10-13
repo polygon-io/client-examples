@@ -1,0 +1,5 @@
+{
+  "require": {
+    "repejota/nats": "dev-master"
+  }
+}
