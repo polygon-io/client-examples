@@ -6,7 +6,7 @@ require_once __DIR__.'/vendor/autoload.php';
 // Get API key from CLI Args:
 $opts = getopt("k:", array( "apikey:" ));
 $apikey = $opts["k"] ?: $opts["apikey"];
-echo "API KEY:".$apikey;
+echo "API KEY:".$apikey."\n";
 
 // Make connection:
 $encoder = new \Nats\Encoders\JSONEncoder();
@@ -16,14 +16,14 @@ $client = new \Nats\EncodedConnection($options, $encoder);
 $client->connect();
 
 // Simple Subscriber.
-$client->subscribe( 'T.*', function ($payload) {
-	$symbol = $payload->body['sym'];
-	$price = $payload->body['p'];
-	$size = $payload->body['s'];
-	echo "Trade: \t Symbol:".$symbol." \t Price:".$price." \t Size:".$size."\n";
+$client->subscribe( 'C.*', function ($payload) {
+	$pair = $payload->body['p'];
+	$ask = $payload->body['a'];
+	$bid = $payload->body['b'];
+	echo "Forex Quote: \t Pair:".$pair." \t Ask:".$ask." \t Bid:".$bid."\n";
 
 	// Print entire payload:
-	// echo json_encode( $payload->body )
+	// echo json_encode( $payload->body );
 });
 
 // Wait for 100 ticks:
