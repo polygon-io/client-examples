@@ -20,7 +20,7 @@ $client->subscribe( 'T.*', function ($payload) {
 	$symbol = $payload->body['sym'];
 	$price = $payload->body['p'];
 	$size = $payload->body['s'];
-	echo "Trade: \t Symbol:".$symbol." \t Price:".$price." \t Size:".$size."\n\n";
+	echo "Trade: \t Symbol:".$symbol." \t Price:".$price." \t Size:".$size."\n";
 
 	// Print entire payload:
 	// echo json_encode( $payload->body )
