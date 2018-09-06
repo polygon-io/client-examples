@@ -11,4 +11,4 @@ Below are some examples of how to connect and use Polygon.io. Feel free to submi
 ### What is Polygon.io?
 Polygon.io offers real-time, low latency streams to stock and forex markets.
 
-We also offer free real-time Forex streams. [Polygon.io](https://polygon.io/)
+Find out more: [Polygon.io](https://polygon.io/)
