@@ -1,59 +1,44 @@
 using System;
-using PureWebSockets;
-using System.Net.WebSockets;
+using WebSocket4Net;
+using System.Security.Authentication;
 
-namespace TestProject{
-    class Program{
-        private static PureWebSocket _ws;
-        static void Main(string[] args){
-            var socketOptions = new PureWebSocketOptions(){
-                DebugMode = true, SendDelay = 100,
-            };
-
-            _ws = new PureWebSocket("wss://socket.polygon.io/forex", socketOptions);
-            _ws.OnStateChanged += Ws_OnStateChanged;
-            _ws.OnMessage += Ws_OnMessage;
-            _ws.OnClosed += Ws_OnClosed;
-            _ws.OnSendFailed += _ws_OnSendFailed;
-            _ws.Connect();
-
-            _ws.Send("{\"action\":\"auth\",\"params\":\"YOUR_API_KEY\"}");
-            _ws.Send("{\"action\":\"subscribe\",\"params\":\"C.*\"}");
-
-            Console.ReadLine();
-
-        }
-        private static void _ws_OnSendFailed(string data, Exception ex)
+namespace HelloWorld
+{
+    class Hello
+    {
+        WebSocket websocket;
+        static void Main()
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{DateTime.Now} Send Failed: {ex.Message}");
-            Console.ResetColor();
-            Console.WriteLine("");
+            new Hello().Start();
         }
-
-        private static void Ws_OnClosed(WebSocketCloseStatus reason)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{DateTime.Now} Connection Closed: {reason}");
-            Console.ResetColor();
-            Console.WriteLine("");
-            Console.ReadLine();
+        public void Start(){
+            this.websocket = new WebSocket("wss://socket.polygon.io/stocks", sslProtocols: SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls);
+            this.websocket.Opened += websocket_Opened;
+            this.websocket.Error += websocket_Error;
+            this.websocket.Closed += websocket_Closed;
+            this.websocket.MessageReceived += websocket_MessageReceived;
+            this.websocket.Open();
+            Console.ReadKey();
         }
-
-        private static void Ws_OnMessage(string message)
+        private void websocket_Opened(object sender, EventArgs e)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"{DateTime.Now} New message: {message}");
-            Console.ResetColor();
-            Console.WriteLine("");
+            Console.WriteLine("Connected!");
+            this.websocket.Send("{\"action\":\"auth\",\"params\":\"YOUR_API_KEY\"}");
+            this.websocket.Send("{\"action\":\"subscribe\",\"params\":\"T.AAPL\"}");
         }
-
-        private static void Ws_OnStateChanged(System.Net.WebSockets.WebSocketState newState, System.Net.WebSockets.WebSocketState prevState)
+        private void websocket_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"{DateTime.Now} Status changed from {prevState} to {newState}");
-            Console.ResetColor();
-            Console.WriteLine("");
+            Console.WriteLine("WebSocket Error");
+            Console.WriteLine(e.Exception.Message);
+        }
+        private void websocket_Closed(object sender, EventArgs e)
+        {
+            Console.WriteLine("Connection Closed...");
+            // Add Reconnect logic... this.Start()
+        }
+        private void websocket_MessageReceived(object sender, MessageReceivedEventArgs e)
+        {
+            Console.WriteLine(e.Message);
         }
     }
 }
