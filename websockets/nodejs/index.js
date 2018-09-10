@@ -13,8 +13,8 @@ ws.on('open', () => {
 
 // Per message packet:
 ws.on('message', ( data ) => {
-	data.split('\n').map(( msg ) => {
-		msg = JSON.parse( msg )
+	data = JSON.parse( data )
+	data.map(( msg ) => {
 		if( msg.ev === 'status' ){
 			return console.log('Status Update:', msg.message)
 		}
