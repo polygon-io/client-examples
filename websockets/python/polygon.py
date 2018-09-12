@@ -2,11 +2,6 @@
 # Details: https://pypi.org/project/websocket-client/
 
 import websocket
-try:
-	import thread
-except ImportError:
-	import _thread as thread
-import time
 
 def on_message(ws, message):
 	print(message)
