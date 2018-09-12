@@ -6,6 +6,7 @@ Below are some examples of how to connect and use Polygon.io. Feel free to submi
 - [NodeJs](./websockets/nodejs/index.js)
 - [GoLang](./websockets/golang/main.go)
 - [C#](./websockets/cs/example.cs)
+- [Python](./websockets/python/polygon.py)
 
 ---
 
