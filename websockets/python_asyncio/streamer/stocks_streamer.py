@@ -36,7 +36,7 @@ class StocksStreamer(PolygonStreamer):
 
 
 def main():
-	polygon_api_key = os.environ.get("polygon_api_key", "CU7ovK_rNPu8WJCYmKqEV7xZGcJnq8wP_tfxWO")
+	polygon_api_key = os.environ.get("polygon_api_key", "my_api_key")
 	cluster = "/stocks"
 	symbols_str = "T.*"
 	streamer = StocksStreamer(api_key=polygon_api_key, cluster=cluster, symbols_str=symbols_str)
