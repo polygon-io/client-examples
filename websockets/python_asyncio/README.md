@@ -1,6 +1,6 @@
-# Python/Asycio web-socket client for Polygon.io
+# Python/Asyncio web-socket client for Polygon.io
 
-* please note this was tested on python 3.6+
+please note this was tested on python 3.6+
 
 ## Installation:
 
