@@ -22,6 +22,7 @@ class PolygonStreamer(object):
 		self._number_workers = number_workers
 		self._timeout = timeout
 		self.queue = asyncio.Queue()
+		self._isConnected = False;
 
 	async def connect(self):
 		while True:
@@ -29,7 +30,9 @@ class PolygonStreamer(object):
 				await websocket.send(json.dumps({"action": "auth", "params": self._api_key}))
 				await websocket.send(json.dumps({"action": "subscribe", "params": self._symbols_str}))
 				logging.info("connected: {}".format(websocket.remote_address))
-				while(True):
+				if websocket.open:
+					self._isConnected = True
+				while self._isConnected:
 					try:
 						message_str = await asyncio.wait_for(websocket.recv(), timeout=self._timeout)
 						# await self.queue.put(message_str)
@@ -42,7 +45,7 @@ class PolygonStreamer(object):
 					except Exception as e:
 						error_message = "resetting connection: {}".format(e.args)
 						logging.error(error_message)
-						raise Exception(error_message)
+						self._isConnected = False;
 
 	async def callback(self, message_str):
 		raise NotImplementedError
