@@ -1,27 +1,32 @@
-# Be sure to pip install websocket-client
-# Details: https://pypi.org/project/websocket-client/
+# Be sure to pip install polygon-api-client
 
-import websocket
+import time
 
-def on_message(ws, message):
-	print(message)
+from polygon import WebSocketClient, STOCKS_CLUSTER
 
-def on_error(ws, error):
-	print(error)
 
-def on_close(ws):
-	print("### closed ###")
+def my_custom_process_message(message):
+    print("this is my custom message processing", message)
 
-def on_open(ws):
-	ws.send('{"action":"auth","params":"YOUR_API_KEY"}')
-	ws.send('{"action":"subscribe","params":"C.AUD/USD,C.USD/EUR,C.USD/JPY"}')
+
+def my_custom_error_handler(ws, error):
+    print("this is my custom error handler", error)
+
+
+def my_custom_close_handler(ws):
+    print("this is my custom close handler")
+
+
+def main():
+    key = 'your api key'
+    my_client = WebSocketClient(STOCKS_CLUSTER, key, my_custom_process_message)
+    my_client.run_async()
+
+    my_client.subscribe("T.MSFT", "T.AAPL", "T.AMD", "T.NVDA")
+    time.sleep(1)
+
+    my_client.close_connection()
+
 
 if __name__ == "__main__":
-	# websocket.enableTrace(True)
-	ws = websocket.WebSocketApp("wss://socket.polygon.io/forex",
-							  on_message = on_message,
-							  on_error = on_error,
-							  on_close = on_close)
-	ws.on_open = on_open
-	ws.run_forever()
-
+    main()
